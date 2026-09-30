@@ -1,0 +1,24 @@
+{
+  "name": "programadesistemas",
+  "version": "1.0.0",
+  "description": "aulas de programas de sistemas",
+  "main": "hello.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariaeduardamacedobrandinho-arch/programadesistemas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mariaeduardamacedobrandinho-arch/programadesistemas/issues"
+  },
+  "homepage": "https://github.com/mariaeduardamacedobrandinho-arch/programadesistemas#readme",
+  "dependencies": {
+    "@inquirer/prompts": "^8.7.2"
+  }
+}
