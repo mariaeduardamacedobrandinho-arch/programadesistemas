@@ -1,5 +1,20 @@
-import {confirm, number} from '@inquirer/prompts';
+//import {confirm, number} from '@inquirer/prompts';
 
-const nome = await input({ message:'Qual o seu nome?'});
-const nome = await input({ message:'Qual o seu nome?'});
-const nome = await input({ message:'Qual o seu nome?'});
+//const nome = await input({ message:'Qual o seu nome?'});
+//const nome = await input({ message:'Qual o seu nome?'});
+//const nome = await input({ message:'Qual o seu nome?'});
+
+import {number } from '@inquirer/prompts';
+let saldo = 1500.00;
+let valor = number ("digite o valor ue desja sacar");
+if (valor<= 0){
+    console.log("valor inválido");
+    }else if (valor > saldo ){
+    console.log("saldo insuficiente");
+    }else if (valor % 10 == 0 ){
+    console.log("nota disponiveis apenas de R$ 10, 20, 50 e 100");
+    }else{
+        saldo -= valor
+        comsole.log("saque efetuado com sucesso saldo restante"
+       `R$  ${SALDO.TOFIXED(2)}`);
+    }
