@@ -20,3 +20,4 @@ if (produtos[i] === "Notebook") { // Procura o produto Notebook.
 console.log("Notebook encontrado!"); // Mostra a mensagem.
 } // Encerra o if.
 } // Encerra o for.
+//npm install inquirer: colocar no terminal depois coloque o nome do titulo e js
