@@ -13,7 +13,7 @@ if (indiceTeclado !== -1) { // Confere se ele foi encontrado.
 precos[indiceTeclado] = 135; // Atualiza o preço para R$ 135.
 } // Encerra a verificação.
 console.log("5. Novo preço do Teclado: R$", precos[indiceTeclado].toFixed(2)); // Confirma o novo preço.
-produtos.push("Headset"); // Adiciona Headset à lista de nomes.
+produtos.push("Headset"); // Adiciona Headset à lista de nomes
 precos.push(220); // Adiciona o preço correspondente.
 console.log("6. Produto adicionado:", produtos[produtos.length - 1]); // Mostra o último nome.
 const removido = produtos.pop(); // Remove o último nome cadastrado.
