@@ -1,16 +1,16 @@
-class Cliente { // 1. Boa prática: Iniciar nome de classe com letra maiúscula
-    constructor(nome, banco, saldo) { // 2. Removida a vírgula sobressalente
+class Cliente { 
+    constructor(nome, banco, saldo) { 
         this.nome = nome;
-        this.banco = banco;   // 3. Corrigido de this.preco para this.banco
-        this.saldo = saldo;   // 4. Corrigido de this.desconto para this.saldo
+        this.banco = banco;   
+        this.saldo = saldo;   
     }
 
     apresentar() {
         console.log(`${this.nome}: R$ ${this.banco} ${this.saldo}`);
     }
 
-    // 5. Movido para dentro da classe
-    exibirCliente() { // Boa prática: Usar camelCase (exibirCliente)
+    
+    exibirCliente() { 
         console.log(`Cliente: ${this.nome}`);
         console.log(`Banco: ${this.banco}`);
         console.log(`Saldo: R$ ${this.saldo}`);
@@ -22,7 +22,7 @@ class Cliente { // 1. Boa prática: Iniciar nome de classe com letra maiúscula
     }
 }
 
-// 7. Corrigido de "nem cliente" para "new Cliente" e o nome da constante para "cliente1"
+
 const cliente1 = new Cliente("dudinha", "bradesco", 12500);
 cliente1.exibirCliente();
 
