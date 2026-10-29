@@ -1,0 +1,107 @@
+/* Configuração geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f5f9;
+    color: #263449;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Título da loja */
+body > h1 {
+    background-color: #10243a;
+    color: white;
+    font-size: 30px;
+    padding: 28px 10px;
+    margin: 0;
+}
+
+/* Menu de navegação */
+nav {
+    background-color: #1d3557;
+    padding: 15px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #7dd3fc;
+}
+
+/* Título da seção */
+section {
+    padding: 25px 15px;
+}
+
+section > h2 {
+    color: #10243a;
+    font-size: 26px;
+    margin-bottom: 25px;
+}
+
+/* Cartões dos carros */
+article {
+    display: inline-block;
+    vertical-align: top;
+    width: 320px;
+    max-width: 90%;
+    box-sizing: border-box;
+    background-color: white;
+    margin: 12px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px #00000015;
+    transition: transform 0.2s;
+}
+
+article:hover {
+    transform: translateY(-5px);
+}
+
+article img {
+    width: 100%;
+    height: 190px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+article h3 {
+    color: #1d4ed8;
+}
+
+article p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 600px) {
+    body > h1 {
+        font-size: 24px;
+    }
+
+    nav ul {
+        gap: 18px;
+    }
+
+    article {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
