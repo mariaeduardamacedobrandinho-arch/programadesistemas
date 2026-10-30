@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Interface didática de controle de estoque.">
+
+    <title>Controle de Estoque</title>
+
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <div class="container topo">
+
+            <div>
+                <h1>Controle de Estoque</h1>
+                <p>Sistema de gerenciamento de produtos</p>
+            </div>
+
+            <nav class="menu"
+                 aria-label="Menu principal">
+
+                <a href="#inicio">Início</a>
+                <a href="#cadastro">Cadastro</a>
+                <a href="#produtos">Produtos</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main class="container conteudo">
+
+        <section id="inicio" class="card">
+            <h2>Painel de Estoque</h2>
+
+            <p id="mensagem">
+                Interface preparada para a Aula 11.
+            </p>
+
+            <button
+                type="button"
+                id="botao_teste"
+                class="botao">
+                Testar Interação
+            </button>
+        </section>
+
+        <section id="cadastro" class="card">
+            <h2>Cadastrar Produto</h2>
+
+            <form id="form_produto">
+                <div class="form-grid">
+
+                    <div class="campo">
+                        <label for="codigo">Código</label>
+
+                        <input
+                            type="number"
+                            id="codigo"
+                            name="codigo"
+                            min="1"
+                            step="1"
+                            required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="nome">Nome</label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            maxlength="100"
+                            required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="preco">Preço</label>
+
+                        <input
+                            type="number"
+                            id="preco"
+                            name="preco"
+                            min="0"
+                            step="0.01"
+                            required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="quantidade">
+                            Quantidade
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantidade"
+                            name="quantidade"
+                            min="0"
+                            step="1"
+                            required>
+                    </div>
+
+                    <div class="campo largura-total">
+                        <label for="categoria">
+                            Categoria
+                        </label>
+
+                        <select
+                            id="categoria"
+                            name="categoria"
+                            required>
+                            <option value="">
+                                Selecione
+                            </option>
+                            <option value="periferico">
+                                Periférico
+                            </option>
+                            <option value="monitor">
+                                Monitor
+                            </option>
+                            <option value="acessorio">
+                                Acessório
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="acoes">
+                    <button
+                        type="button"
+                        class="botao"
+                        disabled
+                        title="Cadastro disponível na Aula 12">
+                        Cadastrar — Aula 12
+                    </button>
+
+                    <button
+                        type="reset"
+                        class="botao botao-secundario">
+                        Limpar
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="produtos" class="card">
+            <h2>Produtos Cadastrados</h2>
+
+            <div class="tabela-rolagem" tabindex="0"
+                 role="region"
+                 aria-label="Tabela de produtos com rolagem">
+                <table class="tabela">
+                    <caption>
+                        Produtos de exemplo
+                    </caption>
+
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Preço</th>
+                            <th scope="col">Qtd.</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>Mouse</td>
+                            <td>R$ 50,00</td>
+                            <td>10</td>
+                        </tr>
+
+                        <tr>
+                            <td>102</td>
+                            <td>Teclado</td>
+                            <td>R$ 80,00</td>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <td>103</td>
+                            <td>Monitor</td>
+                            <td>R$ 700,00</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="rodape">
+        <p>Curso Programador de Sistemas</p>
+        <p>Aula 11 — CSS3 e Introdução ao DOM</p>
+    </footer>
+
+</body>
+</html>

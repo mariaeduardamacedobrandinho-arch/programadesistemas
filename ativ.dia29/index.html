@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Protótipo didático de estoque: HTML5, CSS3, responsividade e primeiro contato com DOM.">
+  <title>Aula 11 | Controle de Estoque</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="container topo">
+      <div>
+        <h1>Controle de Estoque</h1>
+        <p class="subtitulo">Projeto do curso Programador de Sistemas</p>
+      </div>
+      <nav id="menulinks" class="menu" aria-label="Menu principal">
+        <a href="#inicio" class="ativo" aria-current="location">Início</a>
+        <a href="#conceitos">CSS na prática</a>
+        <a href="#cadastro">Cadastro</a>
+        <a href="#produtos">Produtos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container conteudo">
+    <section id="inicio" class="card destaque">
+      <h2>Bem-vindo ao painel</h2>
+      <p id="mensagem" role="status">A interface HTML está pronta para receber estilos e interações.</p>
+      <button id="botao_teste" class="botao" type="button">Testar DOM</button>
+      <p class="nota">O botão demonstra apenas a troca de uma mensagem com JavaScript.</p>
+    </section>
+
+    <section id="conceitos" class="card">
+      <h2>CSS na prática</h2>
+      <p>Observe a mesma classe aplicada em vários cartões e os efeitos dos seletores.</p>
+      <div class="grade-resumo">
+        <article class="resumo-item">
+          <h3>Seletores</h3>
+          <p>Tags, classes, IDs e pseudoclasses.</p>
+        </article>
+        <article class="resumo-item">
+          <h3>Flexbox</h3>
+          <p>Organização dos links no menu.</p>
+        </article>
+        <article class="resumo-item">
+          <h3>CSS Grid</h3>
+          <p>Campos do formulário em colunas.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cadastro" class="card">
+      <h2>Cadastro de produtos</h2>
+      <p class="nota">Protótipo: os dados ainda não são cadastrados. O CRUD será desenvolvido na Aula 12.</p>
+      <form id="form_produto">
+        <div class="form-grid">
+          <div class="campo"><label for="codigo">Código</label><input id="codigo" name="codigo" type="number" min="1" step="1" required></div>
+          <div class="campo"><label for="nome">Nome</label><input id="nome" name="nome" type="text" maxlength="100" required></div>
+          <div class="campo"><label for="preco">Preço (R$)</label><input id="preco" name="preco" type="number" min="0" step="0.01" required></div>
+          <div class="campo"><label for="quantidade">Quantidade</label><input id="quantidade" name="quantidade" type="number" min="0" step="1" required></div>
+          <div class="campo largura-total"><label for="categoria">Categoria</label><select id="categoria" name="categoria" required><option value="">Selecione uma categoria</option><option value="periferico">Periférico</option><option value="monitor">Monitor</option><option value="acessorio">Acessório</option></select></div>
+        </div>
+        <div class="acoes">
+          <button class="botao" type="submit" disabled title="Disponível na Aula 12">Cadastrar — Aula 12</button>
+          <button class="botao botao-secundario" type="reset">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="produtos" class="card">
+      <h2>Produtos cadastrados (exemplos)</h2>
+      <div class="tabela-rolagem" role="region" aria-label="Tabela de produtos com rolagem horizontal" tabindex="0">
+        <table class="tabela">
+          <caption>Estoque demonstrativo</caption>
+          <thead><tr><th scope="col">Código</th><th scope="col">Produto</th><th scope="col">Preço</th><th scope="col">Quantidade</th></tr></thead>
+          <tbody>
+            <tr><td>101</td><td>Mouse</td><td>R$ 50,00</td><td>10</td></tr>
+            <tr><td>102</td><td>Teclado</td><td>R$ 80,00</td><td>5</td></tr>
+            <tr><td>103</td><td>Monitor</td><td>R$ 700,00</td><td>2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="rodape"><p>Curso Programador de Sistemas • Aula 11 — CSS3 e Introdução ao DOM</p></footer>
+</body>
+</html>
+

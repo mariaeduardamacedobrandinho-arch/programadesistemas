@@ -1,0 +1,129 @@
+/* Reset e Fundo */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0b0c10;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Container do Jogo (Quadro onde tudo roda) */
+.game-container {
+    width: 400px;
+    height: 600px;
+    background-color: #12141c;
+    border: 3px solid #1f2833;
+    box-shadow: 0 0 30px rgba(102, 252, 241, 0.3);
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#game-area {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Telas de Menu e Fim de Jogo */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 12, 16, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+}
+
+.screen h1 {
+    color: #66fcf1;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #66fcf1;
+}
+
+.screen p {
+    color: #c5c6c7;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+/* Botões Modernos do Jogo */
+.btn {
+    background: #66fcf1;
+    color: #0b0c10;
+    padding: 12px 30px;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #45f3ff;
+    box-shadow: 0 0 15px #66fcf1;
+}
+
+/* Painel de Pontos (HUD) */
+#hud {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #66fcf1;
+    z-index: 5;
+}
+
+/* Elementos do Jogo (Nave, Tiro, Inimigo) */
+#player {
+    width: 40px;
+    height: 40px;
+    background-color: #66fcf1;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Cria formato de nave triângulo */
+    position: absolute;
+    bottom: 20px;
+    left: 180px;
+    box-shadow: 0 0 10px #66fcf1;
+}
+
+.bullet {
+    width: 6px;
+    height: 15px;
+    background-color: #45f3ff;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 0 0 8px #45f3ff;
+}
+
+.enemy {
+    width: 40px;
+    height: 40px;
+    background-color: #ff4545;
+    position: absolute;
+    border-radius: 50%; /* Faz o inimigo ser um círculo (meteoro) */
+    box-shadow: 0 0 10px #ff4545;
+}
+
+/* Utilitário para sumir com elementos */
+.hide {
+    display: none !important;
+}

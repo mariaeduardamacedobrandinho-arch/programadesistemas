@@ -11,5 +11,5 @@ console.log("Você é maior de idade");
 }
 
 let nome = "duda";
-if (idade >= 21) 
+if (idade >= 21);
     

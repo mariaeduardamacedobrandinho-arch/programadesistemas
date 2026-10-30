@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter - Jogo de Tiro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <!-- Tela de Início -->
+        <div id="start-screen" class="screen">
+            <h1>SPACE SHOOTER</h1>
+            <p>Use o MOUSE para mover e CLIQUE para atirar.</p>
+            <button id="start-btn" class="btn">Jogar</button>
+        </div>
+
+        <!-- Tela de Game Over -->
+        <div id="game-over-screen" class="screen hide">
+            <h1>FIM DE JOGO</h1>
+            <p>Pontuação Final: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="btn">Jogar Novamente</button>
+        </div>
+
+        <!-- Painel de Pontos -->
+        <div id="hud" class="hide">
+            Score: <span id="score-display">0</span>
+        </div>
+
+        <!-- Área onde o jogo acontece -->
+        <div id="game-area">
+            <div id="player" class="hide"></div>
+        </div>
+    </div>
+
+    <!-- Lógica do Jogo em JavaScript simples integrado -->
+    <script>
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const gameArea = document.getElementById('game-area');
+        const player = document.getElementById('player');
+        const scoreDisplay = document.getElementById('score-display');
+        const finalScore = document.getElementById('final-score');
+        const hud = document.getElementById('hud');
+
+        let score = 0;
+        let isGameActive = false;
+        let enemyInterval;
+
+        // Iniciar o jogo
+        function startGame() {
+            score = 0;
+            scoreDisplay.textContent = score;
+            isGameActive = true;
+            
+            startScreen.classList.add('hide');
+            gameOverScreen.classList.add('hide');
+            hud.classList.remove('hide');
+            player.classList.remove('hide');
+
+            // Limpar inimigos antigos se houver
+            document.querySelectorAll('.enemy, .bullet').forEach(el => el.remove());
+
+            // Criar inimigos continuamente
+            enemyInterval = setInterval(createEnemy, 1000);
+            
+            window.requestAnimationFrame(gameLoop);
+        }
+
+        // Movimento do jogador com o mouse
+        gameArea.addEventListener('mousemove', (e) => {
+            if (!isGameActive) return;
+            const rect = gameArea.getBoundingClientRect();
+            let x = e.clientX - rect.left - 20; // 20 é metade da largura do player
+            
+            // Limitar dentro da tela
+            if (x < 0) x = 0;
+            if (x > rect.width - 40) x = rect.width - 40;
+            
+            player.style.left = x + 'px';
+        });
+
+        // Clique para atirar
+        gameArea.addEventListener('click', () => {
+            if (!isGameActive) return;
+            createBullet();
+        });
+
+        // Criar Tiro
+        function createBullet() {
+            const bullet = document.createElement('div');
+            bullet.classList.add('bullet');
+            bullet.style.left = (parseInt(player.style.left) + 17) + 'px';
+            bullet.style.bottom = '50px';
+            gameArea.appendChild(bullet);
+        }
+
+        // Criar Inimigo (Meteoro)
+        function createEnemy() {
+            if (!isGameActive) return;
+            const enemy = document.createElement('div');
+            enemy.classList.add('enemy');
+            const rect = gameArea.getBoundingClientRect();
+            const randomX = Math.floor(Math.random() * (rect.width - 40));
+            
+            enemy.style.left = randomX + 'px';
+            enemy.style.top = '0px';
+            gameArea.appendChild(enemy);
+        }
+
+        // Loop Principal do Jogo (Movimentação e Colisão)
+        function gameLoop() {
+            if (!isGameActive) return;
+
+            // Mover Tiros
+            const bullets = document.querySelectorAll('.bullet');
+            bullets.forEach(bullet => {
+                let bottom = parseInt(bullet.style.bottom);
+                bottom += 8; // Velocidade do tiro
+                bullet.style.bottom = bottom + 'px';
+
+                if (bottom > 600) {
+                    bullet.remove();
+                }
+            });
+
+            // Mover Inimigos
+            const enemies = document.querySelectorAll('.enemy');
+            enemies.forEach(enemy => {
+                let top = parseInt(enemy.style.top);
+                top += 4; // Velocidade do inimigo
+                enemy.style.top = top + 'px';
+
+                // Se o inimigo passar da linha de fundo -> Game Over
+                if (top > 560) {
+                    endGame();
+                }
+
+                // Checar colisão com os tiros
+                bullets.forEach(bullet => {
+                    if (checkCollision(bullet, enemy)) {
+                        bullet.remove();
+                        enemy.remove();
+                        score += 10;
+                        scoreDisplay.textContent = score;
+                    }
+                });
+            });
+
+            window.requestAnimationFrame(gameLoop);
+        }
+
+        // Função de detecção de colisão básica
+        function checkCollision(el1, el2) {
+            const r1 = el1.getBoundingClientRect();
+            const r2 = el2.getBoundingClientRect();
+
+            return !(r1.right < r2.left || 
+                     r1.left > r2.right || 
+                     r1.bottom < r2.top || 
+                     r1.top > r2.bottom);
+        }
+
+        // Finalizar o Jogo
+        function endGame() {
+            isGameActive = false;
+            clearInterval(enemyInterval);
+            finalScore.textContent = score;
+            gameOverScreen.classList.remove('hide');
+            player.classList.add('hide');
+        }
+
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
