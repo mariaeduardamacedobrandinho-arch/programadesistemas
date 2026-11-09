@@ -1,0 +1,78 @@
+
+//desafiou 1
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Dados</title>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Seja Bem-vindo</h2>
+        <p class="subtitle">Identifique-se para continuar</p>
+
+        <div class="input-group">
+            <label for="nome">NOME COMPLETO</label>
+            <input
+                type="text"
+                id="nome"
+                placeholder="Ex: Luiz Macedo"
+                autocomplete="off"
+            >
+        </div>
+
+        <button type="button" id="botao">
+            Confirmar Presença
+        </button>
+
+        <div class="resultado-container">
+            <div id="retorno" class="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+
+        const campoNome = document.querySelector("#nome");
+        const botaoEnviar = document.querySelector("#botao");
+        const retorno = document.querySelector("#retorno");
+
+        botaoEnviar.addEventListener("click", () => {
+
+            const nome = campoNome.value.trim();
+
+            retorno.className = "feedback";
+
+            if (nome === "") {
+
+                retorno.textContent =
+                    "⚠️ Por favor, preencha o campo de nome.";
+
+                retorno.classList.add("erro");
+
+            } else if (nome.length < 3) {
+
+                retorno.textContent =
+                    "⚠️ Digite um nome com pelo menos 3 letras.";
+
+                retorno.classList.add("erro");
+
+            } else {
+
+                retorno.innerHTML =
+                    `Olá, <strong>${nome}</strong>! Registro concluído. ✨`;
+
+                retorno.classList.add("sucesso");
+
+                campoNome.value = "";
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

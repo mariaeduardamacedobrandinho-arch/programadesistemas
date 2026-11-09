@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Especial</title>
+    <style>
+        /* Estilo da página inicial */
+        body {
+            background-color: #111;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo do Botão */
+        .btn-hack {
+            background-color: transparent;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #00ff00;
+            transition: 0.3s;
+        }
+
+        .btn-hack:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        /* Tela de "Hackeado" */
+        .tela-hackeada {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            
+            /* GIF de desenho animado chorando repetido por toda a tela */
+            background-image: url('https://giphy.com');
+            background-repeat: repeat; 
+            background-size: 200px; /* Tamanho ajustado dos GIFs */
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mensagem de Alerta Central */
+        .mensagem {
+            background-color: rgba(0, 0, 0, 0.95);
+            color: #ff0000;
+            font-size: 3rem;
+            font-weight: bold;
+            padding: 40px;
+            border: 5px solid #ff0000;
+            text-align: center;
+            box-shadow: 0 0 40px #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: piscar 0.6s infinite alternate;
+            z-index: 10000;
+            border-radius: 10px;
+        }
+
+        /* Efeito de piscar ultra-rápido */
+        @keyframes piscar {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0.4; transform: scale(0.98); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Conteúdo Inicial -->
+    <h1>Sistema de Teste Interativo</h1>
+    <button class="btn-hack" onclick="iniciarSimulacao()">Hackear</button>
+
+    <!-- Áudio de fundo em loop (Música tema de suspense livre de direitos) -->
+    <audio id="musicaSuspense" loop>
+        <source src="https://soundhelix.com" type="audio/mpeg">
+    </audio>
+
+    <!-- Tela do Efeito -->
+    <div id="telaHack" class="tela-hackeada">
+        <div class="mensagem">Você foi hackeado!</div>
+    </div>
+
+    <script>
+        function iniciarSimulacao() {
+            // 1. Ativa e exibe a tela cheia de GIFs
+            document.getElementById('telaHack').style.display = 'flex';
+            
+            // 2. Toca a música de fundo automaticamente
+            var audio = document.getElementById('musicaSuspense');
+            audio.play().catch(function(error) {
+                console.log("O navegador bloqueou a reprodução automática de áudio sem interação inicial.");
+            });
+        }
+    </script>
+
+</body>
+</html>

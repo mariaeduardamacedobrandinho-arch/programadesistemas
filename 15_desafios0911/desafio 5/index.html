@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercício de Clique</title>
+    <style>
+        body {
+            /* Cor de fundo inicial */
+            background-color: #333333; 
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            /* Evita que o texto seja selecionado ao clicar várias vezes */
+            user-select: none; 
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Clique em qualquer lugar para mudar a cor de fundo!</h1>
+
+    <script>
+        // 1. Cria o evento de clique na página inteira (body)
+        document.body.addEventListener('click', function() {
+            
+            // 2. Gera números aleatórios para criar uma cor RGB
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            
+            // 3. Altera a cor usando style.backgroundColor
+            document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            
+        });
+    </script>
+
+</body>
+</html>

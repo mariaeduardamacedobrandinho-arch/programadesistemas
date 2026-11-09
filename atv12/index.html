@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Cyberpunk - CRUD Array Inspector</title>
+    <style>
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .dashboard { 
+            max-width: 850px; 
+            margin: 0 auto; 
+            background: #161b22; 
+            padding: 25px; 
+            border: 1px solid #30363d; 
+            border-radius: 6px; 
+        }
+        h2 { 
+            color: #58a6ff; 
+            margin-top: 0; 
+            border-bottom: 1px solid #30363d; 
+            padding-bottom: 10px; 
+            font-size: 1.4rem;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+        .card-modulo { 
+            background: #21262d; 
+            border: 1px solid #30363d; 
+            padding: 15px; 
+            border-radius: 6px; 
+        }
+        .card-modulo h3 { 
+            margin-top: 0; 
+            font-size: 1rem; 
+            color: #f0f6fc; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .badge-metodo {
+            background-color: #8b949e;
+            color: #0d1117;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .metodo-push { background-color: #238636; color: white; }
+        .metodo-find { background-color: #1f6feb; color: white; }
+        .metodo-filter { background-color: #d29922; color: white; }
+        .metodo-reduce { background-color: #bc8cff; color: #0d1117; }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 5px; 
+            font-size: 0.85rem;
+        }
+        th, td { 
+            border: 1px solid #30363d; 
+            padding: 8px; 
+            text-align: left; 
+        }
+        th { background-color: #161b22; color: #8b949e; }
+        .txt-destaque { color: #58a6ff; font-weight: bold; }
+        .terminal-log {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #79c0ff;
+            overflow-x: auto;
+        }
+        .total-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #56d364;
+            text-align: right;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h2>[CONSOLE_INSPECTOR]: GERENCIADOR DE PRODUTOS</h2>
+        
+        <div class="grid-layout">
+            <!-- COLUNA 1: PRODUTOS MODIFICADOS -->
+            <div class="card-modulo">
+                <span class="badge-metodo metodo-push">ARRAY.PUSH & UPDATE</span>
+                <h3>Lista Original Alterada</h3>
+                <div id="view-original"></div>
+            </div>
+
+            <!-- COLUNA 2: LISTA FILTRADA -->
+            <div class="card-modulo">
+                <span class="badge-metodo metodo-filter">ARRAY.FILTER</span>
+                <h3>Nova Lista Filtrada (Sem Item 3)</h3>
+                <div id="view-filtrada"></div>
+            </div>
+        </div>
+
+        <!-- LINHA DA BUSCA -->
+        <div class="card-modulo" style="margin-bottom: 20px;">
+            <span class="badge-metodo metodo-find">ARRAY.FIND</span>
+            <h3>Resultado do Rastreamento de Código</h3>
+            <div id="view-busca" class="terminal-log"></div>
+        </div>
+
+        <!-- LINHA DO VALOR TOTAL -->
+        <div class="card-modulo">
+            <span class="badge-metodo metodo-reduce">ARRAY.REDUCE</span>
+            <h3>Métrica Financeira Consolidada (Nova Lista)</h3>
+            <div id="view-total" class="total-display">R$ 0,00</div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONTEXTO DE DADOS EXECUTADOS ---
+
+        // 1. Array base (3 itens)
+        const produtos = [
+            { codigo: 1, nome: "Teclado Mecânico", preco: 250.00 },
+            { codigo: 2, nome: "Mouse Gamer", preco: 150.00 },
+            { codigo: 3, nome: "Monitor 24'", preco: 899.90 }
+        ];
+
+        // 2. Adicionar o quarto item
+        produtos.push({ codigo: 4, nome: "Headset Bluetooth", preco: 320.00 });
+
+        // 3. Pesquisa tratando o erro de string vs número
+        const queryCodigo = "2"; 
+        const itemEncontrado = produtos.find(p => p.codigo === Number(queryCodigo));
+
+        // 4. Modificar preço via referência encontrada
+        const itemAlterar = produtos.find(p => p.codigo === 1);
+        if (itemAlterar) {
+            itemAlterar.preco = 220.00;
+        }
+
+        // 5. Gerar novo array sem o código 3
+        const produtosFiltrados = produtos.filter(p => p.codigo !== 3);
+
+        // 6. Reduzir preço a valor financeiro total
+        const somaFinanceira = produtosFiltrados.reduce((acc, p) => acc + p.preco, 0);
+
+
+        // --- ENGINE DE RENDERIZAÇÃO DA INTERFACE ---
+
+        function renderizarGrid(targetId, dados) {
+            const container = document.getElementById(targetId);
+            let tabela = `<table>
+                <thead>
+                    <tr><th>ID</th><th>PRODUTO</th><th>VALOR</th></tr>
+                </thead>
+                <tbody>`;
+            dados.forEach(item => {
+                tabela += `<tr>
+                    <td>#0${item.codigo}</td>
+                    <td>${item.nome}</td>
+                    <td class="txt-destaque">R$ ${item.preco.toFixed(2)}</td>
+                </tr>`;
+            });
+            tabela += `</tbody></table>`;
+            container.innerHTML = tabela;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderizarGrid("view-original", produtos);
+            renderizarGrid("view-filtrada", produtosFiltrados);
+            
+            const txtBusca = document.getElementById("view-busca");
+            txtBusca.innerHTML = itemEncontrado 
+                ? `&gt; Procura executada em string ("${queryCodigo}") -> Convertido com sucesso.<br>&gt; Registro localizado: [${itemEncontrado.nome}] - Preço: R$ ${itemEncontrado.preco.toFixed(2)}`
+                : `&gt; Erro no rastreamento: código "${queryCodigo}" não existe no banco de dados.`;
+
+            document.getElementById("view-total").textContent = `R$ ${somaFinanceira.toFixed(2)}`;
+        });
+    </script>
+</body>
+</html>

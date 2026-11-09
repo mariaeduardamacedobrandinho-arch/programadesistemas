@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contador</title>
+</head>
+<body>
+
+    <h2 id="titulo">Meu Contador</h2>
+
+    <h3 id="contador">0</h3>
+
+    <button id="incrementar">Incrementar</button>
+
+    <button id="atualizar">Atualizar numero</button>
+
+    <button id="zerar">Zerar</button>
+
+    <script>
+
+        let numero = 0;
+
+        const contador = document.querySelector("#contador");
+        const titulo = document.querySelector("#titulo");
+
+        const botaoIncrementar = document.querySelector("#incrementar");
+        const botaoAtualizar = document.querySelector("#atualizar");
+        const botaoZerar = document.querySelector("#zerar");
+
+        botaoIncrementar.addEventListener("click", function() {
+
+            numero = numero + 1;
+
+            contador.textContent = numero;
+
+        });
+
+        botaoAtualizar.addEventListener("click", function() {
+
+            titulo.textContent = "Contador atualizado!";
+
+        });
+
+        botaoZerar.addEventListener("click", function() {
+
+            numero = 0;
+
+            contador.textContent = numero;
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Dados Premium</title>
+    <style>
+        /* Reset de estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Fundo moderno com gradiente animado */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card estilo Vidro Fosco (Glassmorphism) */
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Grupo de Inputs */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #ffffff;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #333333;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Borda brilhante ao focar no input */
+        input:focus {
+            border-color: #23a6d5;
+            box-shadow: 0 0 15px rgba(35, 166, 213, 0.4);
+            background: #ffffff;
+        }
+
+        /* Botão com efeito de brilho e escala */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Área de resultado estilizada */
+        .resultado-container {
+            margin-top: 1.5rem;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback {
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            width: 100%;
+            animation: fadeIn 0.4s ease forwards;
+            display: none;
+        }
+
+        .feedback.sucesso {
+            display: block;
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .feedback.erro {
+            display: block;
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Seja Bem-vindo</h2>
+        <p class="subtitle">Identifique-se para continuar</p>
+
+        <div class="input-group">
+            <label for="nome">NOME COMPLETO</label>
+            <input type="text" id="nome" placeholder="Ex: João Silva" autocomplete="off">
+        </div>
+
+        <button type="button" id="botao">Confirmar Presença</button>
+
+        <div class="resultado-container">
+            <div id="mensagem" class="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Seleção dos elementos do DOM
+        const campoNome = document.querySelector("#nome");
+        const botaoEnviar = document.querySelector("#botao");
+        const caixaMensagem = document.querySelector("#mensagem");
+
+        // Evento de clique
+        botaoEnviar.addEventListener("click", () => {
+            const nome = campoNome.value.trim();
+
+            // Reseta a animação e classes da mensagem
+            caixaMensagem.className = "feedback"; 
+
+            if (nome === "") {
+                // Alerta de erro customizado na tela
+                caixaMensagem.textContent = "⚠️ Por favor, preencha o campo de nome.";
+                caixaMensagem.classList.add("erro");
+            } else {
+                // Alerta de sucesso customizado na tela
+                caixaMensagem.innerHTML = `Olá, <strong>${nome}</strong>! Registro concluído. ✨`;
+                caixaMensagem.classList.add("sucesso");
+                
+                // Opcional: Limpa o input após o envio bem-sucedido
+                campoNome.value = "";
+            }
+        });
+    </script>
+
+</body>
+</html>

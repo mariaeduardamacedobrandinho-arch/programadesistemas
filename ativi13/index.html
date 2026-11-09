@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 06 - LocalStorage</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background-color: #121214; color: #e1e1e6; padding: 40px; text-align: center; }
+        .box { max-width: 450px; margin: 0 auto; background: #202024; padding: 30px; border-radius: 8px; border: 1px solid #323238; }
+        h2 { color: #00b37e; margin-top: 0; }
+        button { background: #00875f; color: white; border: none; padding: 12px 24px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 1rem; margin-top: 15px; }
+        button:hover { background: #00b37e; }
+        p { color: #8d8d99; font-size: 0.95rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Persistência Local (Storage)</h2>
+        <p>O script executou todas as regras da atividade com sucesso.</p>
+        <p>Aperte <strong>F12</strong> e clique na aba <strong>Console</strong> para ver o array de objetos recuperado.</p>
+        
+        <!-- Botão para testar o requisito "Atualize a página" -->
+        <button onclick="window.location.reload()">🔄 Atualizar Página</button>
+    </div>
+
+    <script>
+        const STORAGE_KEY = "produtos_atividade";
+
+        // Tenta recuperar o conteúdo do localStorage
+        let conteudoSalvo = localStorage.getItem(STORAGE_KEY);
+
+        // Se for a primeira execução (storage vazio), cria e salva o array inicial
+        if (!conteudoSalvo) {
+            console.log("📦 Storage vazio. Criando e salvando array inicial...");
+            
+            // 1. Crie um array com dois produtos
+            const produtosIniciais = [
+                { id: 101, nome: "Mouse Óptico", preco: 89.90 },
+                { id: 102, nome: "Teclado Sem Fio", preco: 179.00 }
+            ];
+
+            // 2. Salve o array no localStorage (Convertendo para String com JSON.stringify)
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(produtosIniciais));
+            
+            // Recarrega a variável para poder recuperar abaixo
+            conteudoSalvo = localStorage.getItem(STORAGE_KEY);
+        } else {
+            console.log("🔄 Página atualizada! Dados lidos diretamente do LocalStorage.");
+        }
+
+        // 3. Recupere o conteúdo salvo (Convertendo de volta para Array com JSON.parse)
+        const produtosRecuperados = JSON.parse(conteudoSalvo);
+
+        // 4. Apresente o resultado no console
+        console.log("=== CONTEÚDO DISPONÍVEL NO LOCALSTORAGE ===");
+        console.table(produtosRecuperados);
+    </script>
+</body>
+</html>

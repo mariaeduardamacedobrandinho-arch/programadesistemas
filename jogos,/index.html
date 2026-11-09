@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Arcade Unificado JS</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0d1117; color: #c9d1d9; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .arcade-container { max-width: 650px; width: 100%; background: #161b22; border: 2px solid #30363d; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        h1 { color: #58a6ff; margin-top: 0; font-size: 1.8rem; letter-spacing: 2px; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+        .menu-jogos { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .btn-jogo { background-color: #21262d; color: #c9d1d9; border: 1px solid #30363d; padding: 10px 15px; font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .btn-jogo:hover { background-color: #30363d; border-color: #8b949e; }
+        .btn-jogo.ativo { background-color: #1f6feb; color: white; border-color: #58a6ff; box-shadow: 0 0 10px rgba(31, 111, 235, 0.5); }
+        .hud { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #56d364; min-height: 28px; }
+        .tela-game { position: relative; display: inline-block; }
+        canvas { background: #0d1117; border: 3px solid #30363d; border-radius: 6px; display: block; }
+        .instrucoes { margin-top: 15px; font-size: 0.85rem; color: #8b949e; background: #21262d; padding: 10px; border-radius: 6px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div class="arcade-container">
+        <h1>🕹️ MULTI-ARCADE JS</h1>
+        <div class="menu-jogos">
+            <button id="btn-tiro" class="btn-jogo ativo" onclick="mudarJogo('tiro')">🚀 Nave / Tiro</button>
+            <button id="btn-cobra" class="btn-jogo" onclick="mudarJogo('cobra')">🐍 Cobrinha</button>
+            <button id="btn-pulo" class="btn-jogo" onclick="mudarJogo('pulo')">🏃‍♂️ Quadrado Pulador</button>
+        </div>
+        <div class="hud" id="hud-texto">PONTOS: 0</div>
+        <div class="tela-game"><canvas id="canvasArcade" width="500" height="400"></canvas></div>
+        <div class="instrucoes" id="texto-ajuda">Controles: Use as setas ⬅️ ➡️ para mover a nave. Barra de Espaço atira.</div>
+    </div>
+    <script>
+        const canvas = document.getElementById("canvasArcade");
+        const ctx = canvas.getContext("2d");
+        const hudTexto = document.getElementById("hud-texto");
+        const textoAjuda = document.getElementById("texto-ajuda");
+
+        let jogoAtual = "tiro", pontos = 0, gameover = false;
+        const comandos = { esquerda: false, direita: false, pulo: false, espaco: false };
+
+        window.addEventListener("keydown", e => {
+            if (e.key === "ArrowLeft" || e.key === "a") comandos.esquerda = true;
+            if (e.key === "ArrowRight" || e.key === "d") comandos.direita = true;
+            if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") {
+                comandos.pulo = true;
+                if (!comandos.espaco && jogoAtual === "tiro" && !gameover) tiros.push({ x: nave.x + 18, y: nave.y, w: 4, h: 10, vel: 7 });
+                comandos.espaco = true;
+            }
+            if (jogoAtual === "cobra") MudarDirecaoCobra(e.key);
+        });
+
+        window.addEventListener("keyup", e => {
+            if (e.key === "ArrowLeft" || e.key === "a") comandos.esquerda = false;
+            if (e.key === "ArrowRight" || e.key === "d") comandos.direita = false;
+            if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") { comandos.pulo = false; comandos.espaco = false; }
+        });
+
+        let nave = { x: 230, y: 360, w: 40, h: 15, vel: 6 }, tiros = [], inimigos = [], spawnIntervalo = 0;
+        const tamanhoCobraBox = 20;
+        let corpoCobra = [], direcaoCobra = "RIGHT", comidaCobra = { x: 0, y: 0 }, frameCobraCount = 0;
+
+        function MudarDirecaoCobra(chave) {
+            if ((chave === "ArrowLeft" || chave === "a") && direcaoCobra !== "RIGHT") direcaoCobra = "LEFT";
+            if ((chave === "ArrowUp" || chave === "w") && direcaoCobra !== "DOWN") direcaoCobra = "UP";
+            if ((chave === "ArrowRight" || chave === "d") && direcaoCobra !== "LEFT") direcaoCobra = "RIGHT";
+            if ((chave === "ArrowDown" || chave === "s") && direcaoCobra !== "UP") direcaoCobra = "DOWN";
+        }
+
+        let runner = { x: 60, y: 320, t: 30, vY: 0, gravidade: 1.0, puloForca: -15, noChao: true };
+        let blocoObstaculo = { x: 550, y: 320, t: 30, vel: 5 };
+
+        function resetarJogo(nomeJogo) {
+            pontos = 0; gameover = false;
+            hudTexto.textContent = "PONTOS: " + pontos; hudTexto.style.color = "#56d364";
+            if (nomeJogo === "tiro") { nave.x = 230; tiros = []; inimigos = []; spawnIntervalo = 0; textoAjuda.textContent = "Controles: Mova com ⬅️ ➡️ (ou A/D) e Atire com Barra de Espaço ou ⬆️."; } 
+            else if (nomeJogo === "cobra") { corpoCobra = [{ x: 10 * tamanhoCobraBox, y: 10 * tamanhoCobraBox }]; direcaoCobra = "RIGHT"; comidaCobra = { x: Math.floor(Math.random() * 24) * tamanhoCobraBox, y: Math.floor(Math.random() * 19) * tamanhoCobraBox }; frameCobraCount = 0; textoAjuda.textContent = "Controles: Use as setas ou W/A/S/D para guiar a cobra."; } 
+            else if (nomeJogo === "pulo") { runner.y = 320; runner.vY = 0; runner.noChao = true; blocoObstaculo.x = 550; blocoObstaculo.vel = 5; textoAjuda.textContent = "Controles: Pressione Barra de Espaço ou ⬆️ para pular."; }
+        }
+
+        function rodarEngineArcade() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!gameover) {
+                if (jogoAtual === "tiro") LoopTiro();
+                else if (jogoAtual === "cobra") LoopCobra();
+                else if (jogoAtual === "pulo") LoopPulo();
+            } else { DesenharGameOver(); }
+            requestAnimationFrame(rodarEngineArcade);
+        }
+
+        function LoopTiro() {
+            if (comandos.esquerda && nave.x > 0) nave.x -= nave.vel;
+            if (comandos.direita && nave.x < canvas.width - nave.w) nave.x += nave.vel;
+            for (let i = tiros.length - 1; i >= 0; i--) { tiros[i].y -= tiros[i].vel; if (tiros[i].y < 0) tiros.splice(i, 1); }
+            spawnIntervalo++; if (spawnIntervalo % 45 === 0) inimigos.push({ x: Math.random() * (canvas.width - 30), y: -30, w: 30, h: 30, vel: 2.5 });
+            for (let i = inimigos.length - 1; i >= 0; i--) {
+                inimigos[i].y += inimigos[i].vel; if (inimigos[i].y > canvas.height) { gameover = true; break; }
+                for (let j = tiros.length - 1; j >= 0; j--) {
+                    if (tiros[j].x < inimigos[i].x + inimigos[i].w && tiros[j].x + tiros[j].w > inimigos[i].x && tiros[j].y < inimigos[i].y + inimigos[i].h && tiros[j].y + tiros[j].h > inimigos[i].y) { inimigos.splice(i, 1); tiros.splice(j, 1); pontos += 10; hudTexto.textContent = "PONTOS: " + pontos; break; }
+                }
+            }
+            ctx.fillStyle = "#58a6ff"; ctx.fillRect(nave.x, nave.y, nave.w, nave.h);
+            ctx.fillStyle = "#ff5555"; tiros.forEach(t => ctx.fillRect(t.x, t.y, t.w, t.h));
+            ctx.fillStyle = "#f2cc60"; inimigos.forEach(ini => ctx.fillRect(ini.x, ini.y, ini.w, ini.h));
+        }
+
+        function LoopCobra() {
+            frameCobraCount++; if (frameCobraCount % 7 !== 0) { DesenharCobraCompleta(); return; }
+            let cabecaX = corpoCobra[0].x, cabecaY = corpoCobra[0].y;
+            if (direcaoCobra === "LEFT") cabecaX -= tamanhoCobraBox; if (direcaoCobra === "UP") cabecaY -= tamanhoCobraBox;
+            if (direcaoCobra === "RIGHT") cabecaX += tamanhoCobraBox; if (direcaoCobra === "DOWN") cabecaY += tamanhoCobraBox;
+            if (cabecaX === comidaCobra.x && cabecaY === comidaCobra.y) { pontos += 1; hudTexto.textContent = "PONTOS: " + pontos; comidaCobra = { x: Math.floor(Math.random() * 24) * tamanhoCobraBox, y: Math.floor(Math.random() * 19) * tamanhoCobraBox }; } else { corpoCobra.pop(); }
+            let novaCabeca = { x: cabecaX, y: cabecaY };
+            if (cabecaX < 0 || cabecaX >= canvas.width || cabecaY < 0 || cabecaY >= canvas.height) gameover = true;
+            for (let i = 0; i < corpoCobra.length; i++) { if (cabecaX === corpoCobra[i].x && cabecaY === corpoCobra[i].y) gameover = true; }
+            corpoCobra.unshift(novaCabeca); DesenharCobraCompleta();
+        }
+
+        function DesenharCobraCompleta() {
+            ctx.fillStyle = "#ff5555"; ctx.fillRect(comidaCobra.x, comidaCobra.y, tamanhoCobraBox, tamanhoCobraBox);
+            for (let i = 0; i < corpoCobra.length; i++) { ctx.fillStyle = i === 0 ? "#56d364" : "#238636"; ctx.fillRect(corpoCobra[i].x, corpoCobra[i].y, tamanhoCobraBox, tamanhoCobraBox); ctx.strokeStyle = "#0d1117"; ctx.strokeRect(corpoCobra[i].x, corpoCobra[i].y, tamanhoCobraBox, tamanhoCobraBox); }
+        }
+
+        function LoopPulo() {
+            ctx.strokeStyle = "#30363d"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 350); ctx.lineTo(500, 350); ctx.stroke();
+            if (comandos.pulo && runner.noChao) { runner.vY = runner.puloForca; runner.noChao = false; }
+            runner.vY += runner.gravidade; runner.y += runner.vY;
+            if (runner.y >= 320) { runner.y = 320; runner.vY = 0; runner.noChao = true; }
+            blocoObstaculo.x -= blocoObstaculo.vel;
+            if (blocoObstaculo.x < -blocoObstaculo.t) { blocoObstaculo.x = 520; blocoObstaculo.vel += 0.4; pontos += 5; hudTexto.textContent = "PONTOS: " + pontos; }
+            if (runner.x < blocoObstaculo.x + blocoObstaculo.t && runner.x + runner.t > blocoObstaculo.x && runner.y < blocoObstaculo.y + blocoObstaculo.t && runner.y + runner.t > blocoObstaculo.y) gameover = true;
+            ctx.fillStyle = "#58a6ff"; ctx.fillRect(runner.x, runner.y, runner.t, runner.t);
+            ctx.fillStyle = "#ff5555"; ctx.fillRect(blocoObstaculo.x, blocoObstaculo.y, blocoObstaculo.t, blocoObstaculo.t);
+        }
+
+        function DesenharGameOver() {
+            ctx.fillStyle = "rgba(13, 17, 23, 0.85)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ff5555"; ctx.font = "bold 28px monospace"; ctx.fillText("FIM DE JOGO!", 155, 180);
+            ctx.fillStyle = "#8b949e"; ctx.font = "16px monospace"; ctx.fillText("Pressione uma das abas acima", 115, 220); ctx.fillText("para reiniciar o jogo", 145, 245);
+            hudTexto.style.color = "#ff5555";
+        }
+
+        function mudarJogo(tipo) { jogoAtual = tipo; document.querySelectorAll(".btn-jogo").forEach(btn => btn.classList.remove("ativo")); document.getElementById("btn-" + tipo).classList.add("ativo"); resetarJogo(tipo); }
+
+        resetarJogo("tiro");
+        rodarEngineArcade();
+    </script>
+</body>
+</html>
