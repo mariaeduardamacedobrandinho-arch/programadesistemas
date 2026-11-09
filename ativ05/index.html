@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema de Login</title>
+<style>
+:root{
+  --bg:#f3f4f8;
+  --card:#fff;
+  --text:#1d2030;
+  --muted:#6b7086;
+  --border:#d6d9e5;
+  --accent:#4f46e5;
+  --accent-text:#fff;
+  --error:#c62828;
+  --ok:#2e7d32;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#14151c;
+    --card:#1e2029;
+    --text:#eceef6;
+    --muted:#9a9fb5;
+    --border:#363a4d;
+    --accent:#818cf8;
+    --accent-text:#14151c;
+    --error:#ef9a9a;
+    --ok:#81c784;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:1rem;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+.card{
+  width:100%;
+  max-width:380px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:2rem 1.75rem;
+}
+h1{margin:0 0 .25rem;font-size:1.5rem}
+.sub{margin:0 0 1.5rem;color:var(--muted);font-size:.95rem}
+label{display:block;margin-bottom:.35rem;font-size:.875rem;font-weight:600}
+.campo{
+  width:100%;
+  padding:.7rem .85rem;
+  margin-bottom:1rem;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:transparent;
+  color:var(--text);
+  font-size:1rem;
+}
+.campo:focus{outline:2px solid var(--accent);outline-offset:1px}
+button{
+  width:100%;
+  padding:.75rem;
+  border:0;
+  border-radius:8px;
+  background:var(--accent);
+  color:var(--accent-text);
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+.mensagem{min-height:1.4rem;margin:1rem 0 0;font-size:.95rem;text-align:center}
+.mensagem.erro{color:var(--error)}
+.mensagem.ok{color:var(--ok)}
+.historico{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.historico h2{margin:0 0 .5rem;font-size:.95rem;color:var(--muted)}
+#lista{margin:0;padding-left:1.2rem;font-size:.95rem}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>Entrar</h1>
+  <p class="sub">Acesse sua conta para continuar.</p>
+
+  <label for="nomeid">Nome</label>
+  <input class="campo" id="nomeid" type="text" placeholder="Seu nome" autocomplete="username">
+
+  <label for="senhaid">Senha</label>
+  <input class="campo" id="senhaid" type="password" placeholder="Sua senha" autocomplete="current-password">
+
+  <button id="botao" type="button">Entrar</button>
+
+  <p class="mensagem" id="mensagem"></p>
+
+  <section class="historico">
+    <h2>Acessos desta sessão</h2>
+    <ul id="lista"></ul>
+  </section>
+</main>
+
+<script>
+// 1) Pegando elementos pelo id
+const nome = document.querySelector("#nomeid");
+const senha = document.querySelector("#senhaid");
+const botao = document.querySelector("#botao");
+const mensagem = document.querySelector("#mensagem");
+const lista = document.querySelector("#lista");
+
+// 2) Pegando elemento pela classe (primeiro .card da página)
+const card = document.querySelector(".card");
+
+// 5) Identificando o clique do botão
+botao.addEventListener("click", () => {
+  // 4) Pegando o valor digitado (value é propriedade, sem parênteses)
+  const nomeDigitado = nome.value.trim();
+  const senhaDigitada = senha.value;
+
+  // Credenciais de teste
+  const loginCorreto = "admin";
+  const senhaCorreta = "1234";
+
+  if (nomeDigitado === "" || senhaDigitada === "") {
+    // 3) Alterando o texto da mensagem
+    mensagem.textContent = "Preencha nome e senha.";
+    mensagem.className = "mensagem erro";
+    return;
+  }
+
+  if (nomeDigitado !== loginCorreto || senhaDigitada !== senhaCorreta) {
+    mensagem.textContent = "Nome ou senha incorretos.";
+    mensagem.className = "mensagem erro";
+    return;
+  }
+
+  // 3) Alterando valor exibido
+  mensagem.textContent = "Bem-vindo(a), " + nomeDigitado + "!";
+  mensagem.className = "mensagem ok";
+
+  // 6) Criando um item de lista
+  const item = document.createElement("li");
+  item.textContent = nomeDigitado;
+
+  // 7) Adicionando o novo item na lista
+  lista.append(item);
+
+  nome.value = "";
+  senha.value = "";
+});
+</script>
+</body>
